@@ -1,5 +1,6 @@
 package main
 
+//インポート
 import (
 	"fmt"
     "net/http"
@@ -11,15 +12,21 @@ import (
     "golang.org/x/crypto/bcrypt"
 )
 
+
+//DBに接続するメゾットを保存するやつ
 var db *gorm.DB
+//エラー処理のための変数
 var err error
 
+//DBに保存するためのstruct
 type User struct{
 	gorm.Model
 	Username string `gorm: "unique"`
 	Password string
 	Email    string `gorm: "unique"`
 }
+
+//DB初期化
 func initDB(){
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8mb4&parseTime=True&loc=Local",
 		os.Getenv("DB_USER"),
@@ -35,6 +42,7 @@ func initDB(){
 	db.AutoMigrate(&User{})
 }
 
+//アカウント登録　JSONで行う
 func register(c *gin.Context){
 	var input struct{
 		Username string `json:"username"`
@@ -59,6 +67,8 @@ func register(c *gin.Context){
     c.JSON(http.StatusOK, gin.H{"message": "Registration successful"})
 }
 
+//アカウントログイン
+//成功でLogin successfulを返す
 func login(c *gin.Context){
 	var input struct {
         Username string `json:"username"`
@@ -82,6 +92,7 @@ func login(c *gin.Context){
 
 } 
 
+//メインメゾット
 func main() {
     initDB()
 
