@@ -26,13 +26,12 @@ RUN go build -o account_management
 
 FROM alpine:latest
 
-RUN apk add --no-cache bash
-
 WORKDIR /app
 
-COPY --from=builder  /app/account_management .
+RUN apk add --update-cache --no-cache bash curl && \
+    curl -o wait-for-it.sh https://raw.githubusercontent.com/vishnubob/wait-for-it/master/wait-for-it.sh 
 
-COPY wait-for-it.sh . 
+COPY --from=builder  /app/account_management .
 
 RUN chmod 111 ./wait-for-it.sh
 

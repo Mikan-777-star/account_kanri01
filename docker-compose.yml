@@ -25,6 +25,12 @@ services:
       DB_USER: user
       DB_PASSWORD: password
       DB_NAME: accountdb
-
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: mysql
+      MYSQL_ROOT_PASSWORD: rootpassword
+    ports:
+      - "8081:80"
 volumes:
   mysql-data:
